@@ -152,15 +152,6 @@ int main(void)
 		shader.SetUniform4f("offset", MouseX, MouseY * -1, 0.0f, 0.0f);
 		renderer.Draw(tri, shader);
 
-		shader.SetUniform4f("offset", MouseX * -1, MouseY * -1, 0.0f, 0.0f);
-		renderer.Draw(tri, shader);
-
-		shader.SetUniform4f("offset", MouseX * -1, MouseY, 0.0f, 0.0f);
-		renderer.Draw(tri, shader);
-
-		shader.SetUniform4f("offset", MouseX, MouseY, 0.0f, 0.0f);
-		renderer.Draw(tri, shader);
-
 		renderer.Swap(window);
 		renderer.PollEvents();
 	}
