@@ -1,6 +1,9 @@
 #pragma once
 
-#include "Renderer.h"
+#define assert(x) if (!(x)) __debugbreak();
+//#include "Renderer.h"
+
+#include <GL/glew.h>
 #include <vector>
 
 struct VertexBufferElement
@@ -32,7 +35,7 @@ struct VertexBufferElement
 class VertexBufferLayout
 {
 private:
-	std::vector<VertexBufferElement> m_Elements;
+	std::vector<VertexBufferElement> m_Elements{};
 	unsigned int m_Stride;
 
 public:

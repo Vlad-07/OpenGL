@@ -16,7 +16,8 @@
 #include "VertexArray.h"
 #include "Shader.h"
 
-#define WindowLength 800
+
+#define WindowWidth 800
 #define WindowHeight 600
 
 double Map(double x, double in_min, double in_max, double out_min, double out_max)
@@ -78,48 +79,10 @@ float MouseX = 0, MouseY = 0;
 
 static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	MouseX = Map(xpos, 0, WindowLength, -1, 1);
+	MouseX = Map(xpos, 0, WindowWidth, -1, 1);
 	MouseY = Map(ypos, 0, WindowHeight, -1, 1);
 
 }
-
-
-
-class Triangle
-{
-private:
-	VertexArray m_Va;
-	VertexBuffer m_Vb;
-	VertexBufferLayout m_Layout;
-	IndexBuffer m_Ib;
-	Shader m_Shader;
-	
-
-
-public:
-
-	Triangle() = default;
-	Triangle()
-	{
-
-	}
-
-	VertexArray GetVA()
-	{
-		return m_Va;
-	}
-
-	IndexBuffer GetIB()
-	{
-		return m_Ib;
-	}
-
-	Shader GetShader()
-	{
-		return m_Shader;
-	}
-};
-
 
 
 int main(void)
@@ -132,7 +95,7 @@ int main(void)
 	GLFWmonitor* primary = glfwGetPrimaryMonitor();
 	
 	glfwWindowHint(GLFW_SAMPLES, 16);
-	window = glfwCreateWindow(WindowLength, WindowHeight, "window", NULL, NULL);
+	window = glfwCreateWindow(WindowWidth, WindowHeight, "window", NULL, NULL);
 
 	CheckWindow(window);
 
@@ -159,18 +122,17 @@ int main(void)
 	};
 
 
-	VertexArray va;
-	VertexBuffer vb(vertices, 2 * 4 * sizeof(float));
+	Triangle tri(vertices, 2 * 4 * sizeof(float), indices, 2 * 3 * sizeof(float));
 
-	VertexBufferLayout layout;
-	layout.Push<float>(2);
+	tri.GetLayout().Push<float>(2);
 
-	va.AddBuffer(vb, layout);
+	tri.GetVA().AddBuffer(tri.GetVB(), tri.GetLayout());
 
 	IndexBuffer ib(indices, 2 * 3 * sizeof(float));
 	
 
 	Shader shader("res/shaders/basic.shader");
+
 	shader.Bind();
 	shader.SetUniform4f("u_Color", 0.5f, 0.2f, 0.5f, 1.0f);
 
@@ -186,17 +148,18 @@ int main(void)
 
 		shader.SetUniform4f("u_Color", MouseX, MouseY, 0.2f, 1.0f);
 		
+
 		shader.SetUniform4f("offset", MouseX, MouseY * -1, 0.0f, 0.0f);
-		renderer.Draw(va, ib, shader);
+		renderer.Draw(tri, shader);
 
 		shader.SetUniform4f("offset", MouseX * -1, MouseY * -1, 0.0f, 0.0f);
-		renderer.Draw(va, ib, shader);
+		renderer.Draw(tri, shader);
 
 		shader.SetUniform4f("offset", MouseX * -1, MouseY, 0.0f, 0.0f);
-		renderer.Draw(va, ib, shader);
+		renderer.Draw(tri, shader);
 
 		shader.SetUniform4f("offset", MouseX, MouseY, 0.0f, 0.0f);
-		renderer.Draw(va, ib, shader);
+		renderer.Draw(tri, shader);
 
 		renderer.Swap(window);
 		renderer.PollEvents();

@@ -12,7 +12,7 @@ struct ShaderSources
 class Shader
 {
 private:
-	unsigned int m_RenderId;
+	unsigned int m_RenderId = 0;
 	std::string m_filePath;
 	std::vector<std::pair<std::string, int>> m_UniformCache{};
 
