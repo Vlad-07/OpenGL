@@ -17,8 +17,11 @@
 #include "Shader.h"
 #include "Texture.h"
 
-#define WindowWidth 800
-#define WindowHeight 600
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
+#define WindowWidth 960
+#define WindowHeight 540
 
 double Map(double x, double in_min, double in_max, double out_min, double out_max)
 {
@@ -79,9 +82,8 @@ float MouseX = 0, MouseY = 0;
 
 static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	MouseX = Map(xpos, 0, WindowWidth, -1, 1);
-	MouseY = Map(ypos, 0, WindowHeight, -1, 1);
-
+	MouseX = xpos;
+	MouseY = ypos;
 }
 
 
@@ -141,14 +143,17 @@ int main(void)
 	IndexBuffer ib(indices, 2 * 3 * sizeof(float));
 	
 
+	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
+
 	Shader shader("res/shaders/basic.shader");
 
 	shader.Bind();
-	shader.SetUniform1i("u_Texture", 0);
+	shader.SetUniformMat4f("u_MVP", proj);
 
-	Texture tex("res/textures/png.png");
+	Texture tex("res/textures/image.png");
 	tex.Bind();
-
+	shader.SetUniform1i("u_Texture", 0);
 
 	Renderer renderer;
 
@@ -163,7 +168,7 @@ int main(void)
 //		shader.SetUniform4f("u_Color", MouseX, MouseY, 0.2f, 1.0f);
 		
 
-		shader.SetUniform4f("offset", MouseX, MouseY * -1, 0.0f, 0.0f);
+//		shader.SetUniform4f("offset", MouseX, MouseY * -1, 0.0f, 0.0f);
 		renderer.Draw(va, ib, shader);
 
 		renderer.Swap(window);
