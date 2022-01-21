@@ -122,11 +122,12 @@ int main(void)
 	};
 
 
-	Triangle tri(vertices, 2 * 4 * sizeof(float), indices, 2 * 3 * sizeof(float));
 
-	tri.GetLayout().Push<float>(2);
-
-	tri.GetVA().AddBuffer(tri.GetVB(), tri.GetLayout());
+	VertexArray va;
+	VertexBuffer vb(vertices, 4 * 2 * sizeof(float));
+	VertexBufferLayout layout;
+	layout.Push<float>(2);
+	va.AddBuffer(vb, layout);
 
 	IndexBuffer ib(indices, 2 * 3 * sizeof(float));
 	
@@ -150,7 +151,7 @@ int main(void)
 		
 
 		shader.SetUniform4f("offset", MouseX, MouseY * -1, 0.0f, 0.0f);
-		renderer.Draw(tri, shader);
+		renderer.Draw(va, ib, shader);
 
 		renderer.Swap(window);
 		renderer.PollEvents();
