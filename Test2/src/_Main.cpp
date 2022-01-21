@@ -91,6 +91,10 @@ int main(void)
 
 	CheckGLFW();
 
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 	GLFWwindow* window;
 	GLFWmonitor* primary = glfwGetPrimaryMonitor();
 	
@@ -105,8 +109,12 @@ int main(void)
 
 	CheckGLEW();
 
-	glEnable(GL_MULTISAMPLE);
-	glfwSwapInterval(1);
+	GLCall(glEnable(GL_BLEND));
+	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+	GLCall(glBlendEquation(GL_FUNC_ADD));
+
+	GLCall(glEnable(GL_MULTISAMPLE));
+	GLCall(glfwSwapInterval(1));
 
 
 	float vertices[] = {
@@ -136,10 +144,9 @@ int main(void)
 	Shader shader("res/shaders/basic.shader");
 
 	shader.Bind();
-	shader.SetUniform4f("u_Color", 0.5f, 0.2f, 0.5f, 1.0f);
 	shader.SetUniform1i("u_Texture", 0);
 
-	Texture tex("res/textures/image.png");
+	Texture tex("res/textures/png.png");
 	tex.Bind();
 
 
@@ -153,7 +160,7 @@ int main(void)
 
 		shader.Bind();
 
-		shader.SetUniform4f("u_Color", MouseX, MouseY, 0.2f, 1.0f);
+//		shader.SetUniform4f("u_Color", MouseX, MouseY, 0.2f, 1.0f);
 		
 
 		shader.SetUniform4f("offset", MouseX, MouseY * -1, 0.0f, 0.0f);
