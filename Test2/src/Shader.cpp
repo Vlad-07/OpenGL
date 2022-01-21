@@ -6,10 +6,10 @@
 
 #include "Renderer.h"
 
-Shader::Shader(const std::string& filepath) : m_filePath(filepath), m_RenderId(0)
+Shader::Shader(const std::string& filepath) : m_FilePath(filepath), m_RenderId(0)
 {
-	m_filePath = filepath;
-	ShaderSources shaderSources = ParseShader(m_filePath);
+	m_FilePath = filepath;
+	ShaderSources shaderSources = ParseShader(m_FilePath);
 	m_RenderId = CreateShader(shaderSources.vertexShaderSource, shaderSources.fragmentShaderSource);
 }
 
@@ -130,7 +130,7 @@ unsigned int Shader::SearchInUniformCache(const std::string& uniformName)
 	return -2;
 }
 
-unsigned int Shader::GetUniformLocation(const std::string& name)
+int Shader::GetUniformLocation(const std::string& name)
 {
 	int location = SearchInUniformCache(name);
 
@@ -145,6 +145,18 @@ unsigned int Shader::GetUniformLocation(const std::string& name)
 		m_UniformCache.push_back(std::make_pair(name, location));
 
 	return location;
+}
+
+void Shader::SetUniform1i(const std::string& name, int value)
+{
+	int location = GetUniformLocation(name);
+	GLCall(glUniform1i(location, value));
+}
+
+void Shader::SetUniform1f(const std::string& name, float value)
+{
+	int location = GetUniformLocation(name);
+	GLCall(glUniform1f(location, value));
 }
 
 void Shader::SetUniform4f(const std::string& name, float f0, float f1, float f2, float f3)

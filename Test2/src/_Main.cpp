@@ -15,7 +15,7 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
-
+#include "Texture.h"
 
 #define WindowWidth 800
 #define WindowHeight 600
@@ -110,10 +110,10 @@ int main(void)
 
 
 	float vertices[] = {
-		-0.25f, -0.25f,
-		 0.25f, -0.25f,
-		 0.25f,  0.25f,
-		-0.25f,  0.25f
+		-0.5f, -0.5f, 0.0f, 0.0f,
+		 0.5f, -0.5f, 1.0f, 0.0f,
+		 0.5f,  0.5f, 1.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f
 	};
 
 	unsigned int indices[] = {
@@ -124,8 +124,9 @@ int main(void)
 
 
 	VertexArray va;
-	VertexBuffer vb(vertices, 4 * 2 * sizeof(float));
+	VertexBuffer vb(vertices, 4 * 4 * sizeof(float));
 	VertexBufferLayout layout;
+	layout.Push<float>(2);
 	layout.Push<float>(2);
 	va.AddBuffer(vb, layout);
 
@@ -136,6 +137,11 @@ int main(void)
 
 	shader.Bind();
 	shader.SetUniform4f("u_Color", 0.5f, 0.2f, 0.5f, 1.0f);
+	shader.SetUniform1i("u_Texture", 0);
+
+	Texture tex("res/textures/image.png");
+	tex.Bind();
+
 
 	Renderer renderer;
 
