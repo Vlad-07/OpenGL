@@ -119,11 +119,12 @@ int main(void)
 	GLCall(glfwSwapInterval(1));
 
 
+
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f, 0.0f,
-		 0.5f, -0.5f, 1.0f, 0.0f,
-		 0.5f,  0.5f, 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f
+		 100.0f, 100.0f, 0.0f,  0.0f, 0.0f,
+		 200.0f, 100.0f, 0.0f,  1.0f, 0.0f,
+		 200.0f, 200.0f, 0.0f,  1.0f, 1.0f,
+		 100.0f, 200.0f, 0.0f,  0.0f, 1.0f
 	};
 
 	unsigned int indices[] = {
@@ -134,16 +135,16 @@ int main(void)
 
 
 	VertexArray va;
-	VertexBuffer vb(vertices, 4 * 4 * sizeof(float));
+	VertexBuffer vb(vertices, 4 * 5 * sizeof(float));
 	VertexBufferLayout layout;
-	layout.Push<float>(2);
+	layout.Push<float>(3);
 	layout.Push<float>(2);
 	va.AddBuffer(vb, layout);
 
 	IndexBuffer ib(indices, 2 * 3 * sizeof(float));
 	
 
-	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+	glm::mat4 proj = glm::ortho(0.0f, (float)WindowWidth, 0.0f, (float)WindowHeight, -1.0f, 1.0f);
 
 
 	Shader shader("res/shaders/basic.shader");
@@ -165,10 +166,6 @@ int main(void)
 
 		shader.Bind();
 
-//		shader.SetUniform4f("u_Color", MouseX, MouseY, 0.2f, 1.0f);
-		
-
-//		shader.SetUniform4f("offset", MouseX, MouseY * -1, 0.0f, 0.0f);
 		renderer.Draw(va, ib, shader);
 
 		renderer.Swap(window);
