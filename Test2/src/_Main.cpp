@@ -145,12 +145,15 @@ int main(void)
 	
 
 	glm::mat4 proj = glm::ortho(0.0f, (float)WindowWidth, 0.0f, (float)WindowHeight, -1.0f, 1.0f);
+	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-50, 350, 0));
 
+	glm::mat4 mvp = proj * view * model;
 
 	Shader shader("res/shaders/basic.shader");
 
 	shader.Bind();
-	shader.SetUniformMat4f("u_MVP", proj);
+	shader.SetUniformMat4f("u_MVP", mvp);
 
 	Texture tex("res/textures/image.png");
 	tex.Bind();
@@ -163,6 +166,11 @@ int main(void)
 	while (!glfwWindowShouldClose(window))
 	{
 		renderer.Clear();
+
+
+		view = glm::translate(glm::mat4(1.0f), glm::vec3(MouseX, MouseY * -1, 0));
+		glm::mat4 mvp = proj * view * model;
+		shader.SetUniformMat4f("u_MVP", mvp);
 
 		shader.Bind();
 
