@@ -6,6 +6,7 @@
 #include <chrono>
 #include <vector>
 #include <iomanip>
+#include <Windows.h>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -106,7 +107,7 @@ int main(void)
 	GLFWmonitor* primary = glfwGetPrimaryMonitor();
 	
 	glfwWindowHint(GLFW_SAMPLES, 16);
-	window = glfwCreateWindow(WindowWidth, WindowHeight, "window", NULL, NULL);
+	window = glfwCreateWindow(WindowWidth, WindowHeight, "Window", NULL, NULL);
 
 	CheckWindow(window);
 
@@ -126,10 +127,10 @@ int main(void)
 
 
 	float vertices[] = {
-		 100.0f, 100.0f, 0.0f,  0.0f, 0.0f,
-		 200.0f, 100.0f, 0.0f,  1.0f, 0.0f,
-		 200.0f, 200.0f, 0.0f,  1.0f, 1.0f,
-		 100.0f, 200.0f, 0.0f,  0.0f, 1.0f
+		-50.0f, -50.0f,   0.0f,  0.0f, 0.0f,
+		 50.0f, -50.0f,   0.0f,  1.0f, 0.0f,
+		 50.0f,  50.0f, 0.0f,  1.0f, 1.0f,
+		-50.0f,  50.0f, 0.0f,  0.0f, 1.0f
 	};
 
 	unsigned int indices[] = {
@@ -151,14 +152,10 @@ int main(void)
 
 	glm::mat4 proj = glm::ortho(0.0f, (float)WindowWidth, 0.0f, (float)WindowHeight, -1.0f, 1.0f);
 	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-50, 350, 0));
-
-	glm::mat4 mvp = proj * view * model;
 
 	Shader shader("res/shaders/basic.shader");
 
 	shader.Bind();
-	shader.SetUniformMat4f("u_MVP", mvp);
 
 	Texture tex("res/textures/image.png");
 	tex.Bind();
@@ -166,9 +163,7 @@ int main(void)
 
 	Renderer renderer;
 
-	bool show_demo_window = true;
-	bool show_another_window = false;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -176,10 +171,9 @@ int main(void)
 	ImGui_ImplOpenGL3_Init("#version 330 core");
 	ImGui::StyleColorsDark();
 
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
-
+	glm::vec3 translationA(0, 0, 0);
+	glm::vec3 translationB(0, 0, 0);
 
 	std::cout << "\n\n\n";
 	while (!glfwWindowShouldClose(window))
@@ -189,33 +183,27 @@ int main(void)
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		view = glm::translate(glm::mat4(1.0f), glm::vec3(MouseX, MouseY * -1, 0));
-		glm::mat4 mvp = proj * view * model;
-		shader.SetUniformMat4f("u_MVP", mvp);
+		{
+			glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);
+			glm::mat4 mvp = proj * view * model;
+			shader.Bind();
+			shader.SetUniformMat4f("u_MVP", mvp);
 
-		shader.Bind();
+			renderer.Draw(va, ib, shader);
+		}
 
-		renderer.Draw(va, ib, shader);
+		{
+			glm::mat4 model = glm::translate(glm::mat4(1.0f), translationB);
+			glm::mat4 mvp = proj * view * model;
+			shader.Bind();
+			shader.SetUniformMat4f("u_MVP", mvp);
 
+			renderer.Draw(va, ib, shader);
+		}
 
-
-		static float f = 0.0f;
-		static int counter = 0;
-
-		ImGui::Begin("Debug");                          // Create a window called "Hello, world!" and append into it.
-
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-		ImGui::Checkbox("Another Window", &show_another_window);
-
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			counter++;
-		ImGui::SameLine();
-		ImGui::Text("counter = %d", counter);
-
+		ImGui::Begin("Debug");
+		ImGui::SliderFloat3("Translation A", &translationA.x, 0.0f, 960.0f);
+		ImGui::SliderFloat3("Translation B", &translationB.x, 0.0f, 960.0f);
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
 
