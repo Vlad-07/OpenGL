@@ -10,6 +10,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
@@ -168,7 +169,6 @@ int main(void)
 	{
 		renderer.Clear();
 
-
 		view = glm::translate(glm::mat4(1.0f), glm::vec3(MouseX, MouseY * -1, 0));
 		glm::mat4 mvp = proj * view * model;
 		shader.SetUniformMat4f("u_MVP", mvp);
@@ -177,9 +177,11 @@ int main(void)
 
 		renderer.Draw(va, ib, shader);
 
+
 		renderer.Swap(window);
 		renderer.PollEvents();
 	}
+
 
 //	glfwTerminate();
 	return 0;
