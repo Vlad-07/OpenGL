@@ -116,7 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src\vendor;$(SolutionDir)\Dependencies\include;$(SolutionDir)\Dependencies\glew-2.1.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\vendor;$(SolutionDir)\Dependencies\include;$(SolutionDir)\Dependencies\glew-2.1.0\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\IndexBuffer.cpp" />
+    <ClCompile Include="src\tests\TestClearColor.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Triangle.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
@@ -307,6 +308,8 @@
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\tests\Test.h" />
+    <ClInclude Include="src\tests\TestClearColor.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Triangle.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
