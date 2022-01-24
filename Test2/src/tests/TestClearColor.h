@@ -3,7 +3,7 @@
 
 namespace test
 {
-	class ClearColor : Test
+	class ClearColor : public Test
 	{
 	private:
 		float m_ClearColor[4];

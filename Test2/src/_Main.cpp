@@ -132,21 +132,38 @@ int main(void)
 
 	Renderer renderer;
 
+	bool clearColorTest = false;
+
 	test::ClearColor test;
 
 
 	std::cout << "\n\n\n";
 	while (!glfwWindowShouldClose(window))
 	{
+		GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 		renderer.Clear();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		
-		test.OnUpdate(0);
-		test.OnRender();
-		test.OnImguiRender();
+		if (!clearColorTest)
+		{
+			ImGui::Begin("Tests");
+			clearColorTest = ImGui::Button("Clear Color");
+			ImGui::End();
+		}
+		else if(clearColorTest)
+		{
+			test.OnUpdate(0);
+			test.OnRender();
+			test.OnImguiRender();
+
+			if (test.ShouldClose())
+			{
+				clearColorTest = false;
+				test.Reset();
+			}
+		}
 
 
 		ImGui::Render();
