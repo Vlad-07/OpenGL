@@ -132,11 +132,13 @@ int main(void)
 
 	Renderer renderer;
 
-	bool clearColorTest = false;
+	test::Test* currentTest = nullptr;
+	test::TestMenu* testMenu = new test::TestMenu(currentTest);
+	currentTest = testMenu;
 
-	test::ClearColor test;
+	testMenu->RegisterTest<test::ClearColor>("Clear Color");
 
-
+	
 	std::cout << "\n\n\n";
 	while (!glfwWindowShouldClose(window))
 	{
@@ -146,23 +148,18 @@ int main(void)
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		if (!clearColorTest)
-		{
-			ImGui::Begin("Tests");
-			clearColorTest = ImGui::Button("Clear Color");
-			ImGui::End();
-		}
-		else if(clearColorTest)
-		{
-			test.OnUpdate(0);
-			test.OnRender();
-			test.OnImguiRender();
 
-			if (test.ShouldClose())
-			{
-				clearColorTest = false;
-				test.Reset();
-			}
+		if (currentTest)
+		{
+			currentTest->OnUpdate(0);
+			currentTest->OnRender();
+
+			ImGui::Begin("Test");
+
+			if (currentTest != testMenu && ImGui::Button("Close"))
+				delete currentTest, currentTest = testMenu;
+
+			ImGui::End();
 		}
 
 
