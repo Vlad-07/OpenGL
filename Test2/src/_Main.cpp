@@ -153,13 +153,10 @@ int main(void)
 		{
 			currentTest->OnUpdate(0);
 			currentTest->OnRender();
-
-			ImGui::Begin("Test");
+			currentTest->OnImguiRender();
 
 			if (currentTest != testMenu && ImGui::Button("Close"))
 				delete currentTest, currentTest = testMenu;
-
-			ImGui::End();
 		}
 
 

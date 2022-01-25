@@ -33,19 +33,10 @@ namespace test
 		void OnImguiRender() override;
 
 		template<typename T>
-		void RegisterTest(const std::string& testName)
+		void RegisterTest(const std::string& name)
 		{
-			std::cout << testName << " test registration";
-			for (int i = testName.length() + 18; i <= 31; i++, std::cout << '.');
-			std::cout << "unhandeled test type \n";
-			assert(false);
-		}
-
-		template<>
-		void RegisterTest<test::ClearColor>(const std::string& testName)
-		{
-			std::cout << "Registering test: " << testName << '\n';
-			m_Tests.push_back(std::make_pair(testName, []() { return new test::ClearColor(); }));
+			std::cout << "Reg test " << name << '\n';
+			m_Tests.push_back(std::make_pair(name, []() { return new T(); }));
 		}
 	};
 }

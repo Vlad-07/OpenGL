@@ -23,6 +23,4 @@ void test::ClearColor::OnRender()
 void test::ClearColor::OnImguiRender()
 {
 	ImGui::ColorPicker4("Clear color", m_ClearColor);
-	if (ImGui::Button("Close"))
-		;
 }
