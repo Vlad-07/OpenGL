@@ -75,6 +75,9 @@
     <ClCompile Include="src\tests\Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\tests\TestTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\basic.shader" />
@@ -1394,12 +1397,18 @@
     <ClInclude Include="src\tests\TestClearColor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\tests\TestTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\image.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\png.png">
+    <Image Include="res\textures\Color_Test_Texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\Transparency-Blending_Test_Texture.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
