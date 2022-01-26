@@ -25,6 +25,7 @@
 #include "Texture.h"
 
 #include "tests/TestClearColor.h"
+#include "tests/TestTexture.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -130,6 +131,7 @@ int main(void)
 	
 	InitImGui(window);
 
+
 	Renderer renderer;
 
 	test::Test* currentTest = nullptr;
@@ -137,6 +139,7 @@ int main(void)
 	currentTest = testMenu;
 
 	testMenu->RegisterTest<test::ClearColor>("Clear Color");
+	testMenu->RegisterTest<test::TextureTest>("Texture Test");
 
 	
 	std::cout << "\n\n\n";
