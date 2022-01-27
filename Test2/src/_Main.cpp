@@ -169,6 +169,10 @@ int main(void)
 		renderer.PollEvents();
 	}
 
+	if (currentTest != testMenu)
+		delete testMenu;
+	delete currentTest;
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
