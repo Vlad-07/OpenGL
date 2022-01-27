@@ -103,8 +103,7 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 
 int main(void)
 {
-	std::cout << "Begin...\n\n";
-
+	std::cout << "Begin...\n";
 	CheckGLFW();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -121,6 +120,7 @@ int main(void)
 
 	CheckGLEW();
 
+	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << "\n\n";
 
 	GLCall(glEnable(GL_BLEND));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
@@ -132,12 +132,12 @@ int main(void)
 	
 	InitImGui(window);
 
-	std::cout << glGetString(GL_VERSION) << '\n';
 
 	Renderer renderer;
 
+	std::string currentTestName = "Test Menu";
 	test::Test* currentTest = nullptr;
-	test::TestMenu* testMenu = new test::TestMenu(currentTest);
+	test::TestMenu* testMenu = new test::TestMenu(currentTest, currentTestName);
 	currentTest = testMenu;
 
 	testMenu->RegisterTest<test::ClearColor>("Clear Color");
@@ -157,12 +157,18 @@ int main(void)
 
 		if (currentTest)
 		{
+			ImGui::Begin(currentTestName.c_str());
 			currentTest->OnUpdate(0);
 			currentTest->OnRender();
 			currentTest->OnImguiRender();
 
 			if (currentTest != testMenu && ImGui::Button("Close"))
-				delete currentTest, currentTest = testMenu;
+				delete currentTest, currentTest = testMenu, currentTestName = "Test Menu";
+			ImGui::End();
+			
+			ImGui::Begin("Debug");
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::End();
 		}
 
 

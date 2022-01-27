@@ -24,10 +24,13 @@ namespace test
 	{
 	private:
 		Test*& m_CurrentTest;
-		std::vector < std::pair<std::string, std::function<Test* ()>>> m_Tests;
+		std::string* m_CurrentTestName;
 
 	public:
-		TestMenu(Test*& curentTestPtr);
+		std::vector <std::pair<std::string, std::function<Test* ()>>> m_Tests;
+
+	public:
+		TestMenu(Test*& curentTestPtr, std::string& currentTestNamePtr);
 		~TestMenu();
 
 		void OnImguiRender() override;
