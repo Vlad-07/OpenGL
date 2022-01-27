@@ -42,6 +42,15 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 	GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 }
 
+void Renderer::DrawOverrided(const VertexArray& va, const IndexBuffer& ib, const Shader& shader, int count)
+{
+	shader.Bind();
+	va.Bind();
+	ib.Bind();
+
+	GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
+}
+
 void Renderer::Draw(const Triangle& triangle, const Shader& shader)
 {
 	shader.Bind();

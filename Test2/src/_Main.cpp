@@ -26,6 +26,7 @@
 
 #include "tests/TestClearColor.h"
 #include "tests/TestTexture.h"
+#include "tests/TestGeometry.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -140,6 +141,7 @@ int main(void)
 
 	testMenu->RegisterTest<test::ClearColor>("Clear Color");
 	testMenu->RegisterTest<test::TextureTest>("Texture Test");
+	testMenu->RegisterTest<test::Geometry>("Geometry Test");
 
 	
 	std::cout << "\n\n\n";

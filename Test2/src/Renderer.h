@@ -31,6 +31,7 @@ public:
 
 	void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader);
 	void Draw(const Triangle& triangle, const Shader& shader);
+	void DrawOverrided(const VertexArray& va, const IndexBuffer& ib, const Shader& shader, int count);
 
 	void Swap(GLFWwindow* window);
 	void PollEvents();
