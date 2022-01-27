@@ -25,7 +25,7 @@
 #include "Texture.h"
 
 #include "tests/TestClearColor.h"
-#include "tests/TestTexture.h"
+#include "tests/TestTexture2D.h"
 #include "tests/TestGeometry.h"
 
 #include "glm/glm.hpp"
@@ -132,6 +132,7 @@ int main(void)
 	
 	InitImGui(window);
 
+	std::cout << glGetString(GL_VERSION) << '\n';
 
 	Renderer renderer;
 

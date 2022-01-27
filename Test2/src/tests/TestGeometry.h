@@ -30,16 +30,6 @@ namespace test
 			0, 1, 2
 		};
 
-		unsigned int indicesB[3] = {
-			2, 3, 0
-		};
-
-		unsigned int indicesC[3] = {
-			2, 3, 4
-		};
-
-
-
 	public:
 
 		Geometry();
