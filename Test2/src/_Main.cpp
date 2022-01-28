@@ -129,7 +129,6 @@ int main(void)
 	GLCall(glEnable(GL_MULTISAMPLE));
 	GLCall(glfwSwapInterval(1));
 
-	
 	InitImGui(window);
 
 
@@ -185,6 +184,6 @@ int main(void)
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
-//	glfwTerminate();
+	glfwTerminate();
 	return 0;
 }

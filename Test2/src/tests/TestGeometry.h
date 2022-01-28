@@ -10,11 +10,11 @@ namespace test
 		int m_ShapeCount = 2;
 
 		Renderer renderer;
-		VertexArray* m_Va;
+		VertexArray m_Va;
 		VertexBuffer* m_Vb;
-		VertexBufferLayout* m_Layout;
+		VertexBufferLayout m_Layout;
 		IndexBuffer* m_Ib;
-		Shader* m_Shader;
+		Shader m_Shader;
 
 
 		float vertices[25] = {
