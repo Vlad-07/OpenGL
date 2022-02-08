@@ -1,3 +1,20 @@
+#include "TestAbout.h"
+
+#include "imgui/imgui.h"
+
+namespace test
+{
+	About::About()
+	{
+	}
+
+	About::~About()
+	{
+	}
+
+	void About::OnImguiRender()
+	{
+		std::string buffer = R"(
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -93,6 +110,7 @@ static inline void CheckWindow(GLFWwindow* window)
 	std::cout << "GLFW_WINDOW....................OK\n";
 }
 
+
 float MouseX = 0, MouseY = 0;
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
@@ -103,12 +121,9 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 
 int main(void)
 {
-	// TODO: dvd test
-
-
-	int w = -1, h = -1;
+	int w, h;
 	std::cout << "Input window width and height (-1 for default)\n";
-//	std::cin >> w >> h;
+	std::cin >> w >> h;
 
 	if (w != -1)
 		WindowWidth = w;
@@ -155,69 +170,16 @@ int main(void)
 	test::TestMenu* testMenu = new test::TestMenu(currentTest, currentTestName);
 	currentTest = testMenu;
 
-
 	testMenu->RegisterTest<test::ClearColor>("Clear Color");
 	testMenu->RegisterTest<test::TextureTest>("Texture Test");
 	testMenu->RegisterTest<test::Geometry>("Geometry Test");
 	testMenu->RegisterTest<test::About>("About");
 
 	
-	bool starting = true;
-
-
 	std::cout << "\n\n";
 	while (!glfwWindowShouldClose(window))
 	{
-		//    /*
-		if (starting)
-		{
-			GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-			renderer.Clear();
-			ImGui_ImplOpenGL3_NewFrame();
-			ImGui_ImplGlfw_NewFrame();
-			ImGui::NewFrame();
-
-			ImGuiWindowFlags windowFlags = 0;
-			windowFlags |= ImGuiWindowFlags_NoTitleBar;
-			windowFlags |= ImGuiWindowFlags_NoScrollbar;
-			windowFlags |= ImGuiWindowFlags_NoMove;
-			windowFlags |= ImGuiWindowFlags_NoResize;
-			windowFlags |= ImGuiWindowFlags_NoCollapse;
-			windowFlags |= ImGuiWindowFlags_NoNav;
-			windowFlags |= ImGuiWindowFlags_NoBackground;
-			windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-			windowFlags |= ImGuiWindowFlags_UnsavedDocument;
-			bool* o = nullptr;
-
-			ImGui::Begin("h", o, windowFlags);
-
-			Random random;
-
-			static float progress = 0.0f, step = 0.0f;
-			progress += step * ImGui::GetIO().DeltaTime;
-
-			if (random.RandomNumber(0, 100) > 99)
-				step = random.RandomNumber(0.1f, 0.4f);
-
-			if (progress >= +1.1f)
-				starting = false;
-			ImGui::SameLine(200);
-			ImGui::Text("Loading...");
-			ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f));
-			ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
-
-
-			ImGui::End();
-
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-			renderer.Swap(window);
-			renderer.PollEvents();
-			
-			continue;
-		}
-		//   */
-		GLCall(glClearColor(0.03f, 0.03f, 0.03f, 1.0f));
+		GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 		renderer.Clear();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -227,7 +189,6 @@ int main(void)
 		if (currentTest)
 		{
 			ImGui::Begin(currentTestName.c_str());
-
 			currentTest->OnUpdate(0);
 			currentTest->OnRender();
 			currentTest->OnImguiRender();
@@ -237,24 +198,36 @@ int main(void)
 			ImGui::End();
 			
 			ImGui::Begin("Debug");
-			ImGui::Text("Frametime: %.3f ms (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::Text("Frametime: %.3f ms (%.1f FPS) ", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::End();
-		}
-
-
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		renderer.Swap(window);
-		renderer.PollEvents();
 	}
 
-	if (currentTest != testMenu)
-		delete testMenu;
-	delete currentTest;
 
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
-	glfwTerminate();
-	return 0;
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	renderer.Swap(window);
+	renderer.PollEvents();
+}
+
+if (currentTest != testMenu)
+delete testMenu;
+delete currentTest;
+
+ImGui_ImplOpenGL3_Shutdown();
+ImGui_ImplGlfw_Shutdown();
+ImGui::DestroyContext();
+glfwTerminate();
+return 0;
+})";
+
+		ImGui::Text("Vlad_");
+		ImGui::NewLine();
+		ImGui::Checkbox("Show demo window", &m_ShowDemo);
+
+		ImGui::Text("_Main.cpp");
+		ImGui::InputTextMultiline("##src", (char*)buffer.c_str(), sizeof(buffer));
+
+		if (m_ShowDemo)
+			ImGui::ShowDemoWindow();
+	}
 }
