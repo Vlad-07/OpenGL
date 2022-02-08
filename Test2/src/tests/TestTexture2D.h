@@ -33,6 +33,7 @@ namespace test
 			2, 3, 0
 		};
 
+		static bool m_Blending;
 
 	public:
 

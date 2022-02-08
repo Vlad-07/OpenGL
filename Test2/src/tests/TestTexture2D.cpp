@@ -3,6 +3,10 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include <gl/glew.h>
+
+bool test::TextureTest::m_Blending = true;
+
 test::TextureTest::TextureTest() :	m_ColorTest("C:/dev/OpenGL/Test2/Test2/res/textures/Color_Test_Texture.png"),
 									m_BlendTest("C:/dev/OpenGL/Test2/Test2/res/textures/Transparency-Blending_Test_Texture.png")
 {
@@ -40,6 +44,15 @@ void test::TextureTest::OnUpdate(float deltaTime)
 
 void test::TextureTest::OnRender()
 {
+	if (m_Blending)
+	{
+		GLCall(glEnable(GL_BLEND));
+	}
+	else
+	{
+		GLCall(glDisable(GL_BLEND));
+	}
+
 	switch (m_ActiveTexture)
 	{
 	case test::TextureTest::TestType::ColorTest:
@@ -60,6 +73,10 @@ void test::TextureTest::OnRender()
 
 void test::TextureTest::OnImguiRender()
 {
+	ImGui::Checkbox("Blending", &m_Blending);
+
+	ImGui::NewLine();
+
 	switch (m_ActiveTexture)
 	{
 	case test::TextureTest::TestType::ColorTest:
