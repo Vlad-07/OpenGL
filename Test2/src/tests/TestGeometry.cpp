@@ -3,6 +3,9 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include <gl/glew.h>
+
+int test::Geometry::m_VSync = 1;
 
 test::Geometry::Geometry() : m_Shader("res/shaders/basic.shader")
 {
@@ -36,10 +39,17 @@ void test::Geometry::OnUpdate(float deltaTime)
 
 void test::Geometry::OnRender()
 {
+	GLCall(glfwSwapInterval(m_VSync));
 	renderer.DrawOverrided(m_Va, *m_Ib, m_Shader, m_ShapeCount * 3);
 }
 
 void test::Geometry::OnImguiRender()
 {
+	ImGui::InputInt("VSync", &m_VSync);
+	if (m_VSync < 0)
+		m_VSync = 0;
+
+	ImGui::NewLine();
+
 	ImGui::SliderInt("Shape Count", &m_ShapeCount, 0, 3);
 }

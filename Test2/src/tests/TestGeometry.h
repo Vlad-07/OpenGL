@@ -38,7 +38,7 @@ namespace test
 			2, 3, 4
 		};
 
-
+		static int m_VSync;
 
 	public:
 
