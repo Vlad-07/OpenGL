@@ -26,11 +26,13 @@ namespace test
 		Test*& m_CurrentTest;
 		std::string* m_CurrentTestName;
 
+		bool* m_ShouldClose;
+
 	public:
 		std::vector <std::pair<std::string, std::function<Test* ()>>> m_Tests;
 
 	public:
-		TestMenu(Test*& curentTestPtr, std::string& currentTestNamePtr);
+		TestMenu(Test*& curentTestPtr, std::string& currentTestNamePtr, bool* shouldClose);
 		~TestMenu();
 
 		void OnImguiRender() override;

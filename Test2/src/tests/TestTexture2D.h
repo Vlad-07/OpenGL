@@ -2,6 +2,7 @@
 #include "Test.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "VertexBufferLayout.h"
 
 namespace test
 {

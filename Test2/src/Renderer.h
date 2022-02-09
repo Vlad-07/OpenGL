@@ -7,7 +7,6 @@
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
-#include "Triangle.h"
 
 
 #define assert(x) if (!(x)) __debugbreak();
@@ -30,7 +29,6 @@ public:
 	void Clear() const;
 
 	void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader);
-	void Draw(const Triangle& triangle, const Shader& shader);
 	void DrawOverrided(const VertexArray& va, const IndexBuffer& ib, const Shader& shader, int count);
 
 	void Swap(GLFWwindow* window);

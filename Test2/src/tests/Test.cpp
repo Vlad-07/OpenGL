@@ -2,7 +2,8 @@
 #include "Test.h"
 #include "imgui/imgui.h"
 
-test::TestMenu::TestMenu(Test*& curentTestPtr, std::string& currentTestNamePtr) : m_CurrentTest(curentTestPtr), m_CurrentTestName(&currentTestNamePtr)
+test::TestMenu::TestMenu(Test*& curentTestPtr, std::string& currentTestNamePtr, bool* shouldClose)
+	: m_CurrentTest(curentTestPtr), m_CurrentTestName(&currentTestNamePtr), m_ShouldClose(shouldClose)
 {
 }
 
@@ -18,5 +19,5 @@ void test::TestMenu::OnImguiRender()
 			m_CurrentTest = test.second(), *m_CurrentTestName = test.first;
 	}
 	if (ImGui::Button("Terminate app"))
-		exit(1);
+		*m_ShouldClose = true;
 }

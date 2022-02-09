@@ -1,6 +1,7 @@
 #pragma once
 #include "Test.h"
 #include "Renderer.h"
+#include "VertexBufferLayout.h"
 
 namespace test
 {

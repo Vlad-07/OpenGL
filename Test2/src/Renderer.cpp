@@ -51,15 +51,6 @@ void Renderer::DrawOverrided(const VertexArray& va, const IndexBuffer& ib, const
 	GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
 }
 
-void Renderer::Draw(const Triangle& triangle, const Shader& shader)
-{
-	shader.Bind();
-	triangle.GetVA().Bind();
-	triangle.GetIB().Bind();
-
-	GLCall(glDrawElements(GL_TRIANGLES, triangle.GetIB().GetCount(), GL_UNSIGNED_INT, nullptr));
-}
-
 void Renderer::Swap(GLFWwindow* window)
 {
 	glfwSwapBuffers(window);

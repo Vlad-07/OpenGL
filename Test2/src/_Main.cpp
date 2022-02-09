@@ -92,6 +92,13 @@ static inline void CheckWindow(GLFWwindow* window)
 	}
 	std::cout << "GLFW_WINDOW....................OK\n";
 }
+static inline void PrintStats()
+{
+	std::cout << "\nOpenGL renderer:\n";
+	std::cout << " Vendor........................." << glGetString(GL_VENDOR) << '\n';
+	std::cout << " Renderer......................." << glGetString(GL_RENDERER) << '\n';
+	std::cout << " Version........................" << glGetString(GL_VERSION) << "\n\n";
+}
 
 float MouseX = 0, MouseY = 0;
 
@@ -106,9 +113,9 @@ int main(void)
 	// TODO: dvd test
 
 
-	int w = -1, h = -1;
-	std::cout << "Input window width and height (-1 for default)\n";
-//	std::cin >> w >> h;
+	int w = -1, h = -1, samples = 8;
+	std::cout << "Input window width, height and aa samples (-1 for default)\n";
+	std::cin >> w >> h >> samples;
 
 	if (w != -1)
 		WindowWidth = w;
@@ -116,12 +123,15 @@ int main(void)
 	if (h != -1)
 		WindowHeight = h;
 
+	if (samples < 0)
+		samples = 4;
+
 	std::cout << "Begin...\n";
 	CheckGLFW();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_SAMPLES, 16);
+	glfwWindowHint(GLFW_SAMPLES, samples);
 
 	GLFWwindow* window;
 	GLFWmonitor* primary = glfwGetPrimaryMonitor();
@@ -133,10 +143,7 @@ int main(void)
 
 	CheckGLEW();
 
-	std::cout << "OpenGL renderer:\n";
-	std::cout << "Vendor........................." << glGetString(GL_VENDOR) << "\n";
-	std::cout << "Renderer......................." << glGetString(GL_RENDERER) << "\n";
-	std::cout << "Version........................" << glGetString(GL_VERSION) << "\n";
+	PrintStats();
 
 	GLCall(glEnable(GL_BLEND));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
@@ -150,13 +157,15 @@ int main(void)
 
 	Renderer renderer;
 
+	bool shouldClose = false;
+
 	std::string currentTestName = "Test Menu";
 	test::Test* currentTest = nullptr;
-	test::TestMenu* testMenu = new test::TestMenu(currentTest, currentTestName);
+	test::TestMenu* testMenu = new test::TestMenu(currentTest, currentTestName, &shouldClose);
 	currentTest = testMenu;
 
 
-	testMenu->RegisterTest<test::ClearColor>("Clear Color");
+	testMenu->RegisterTest<test::ClearColor>("Clear Color Test");
 	testMenu->RegisterTest<test::TextureTest>("Texture Test");
 	testMenu->RegisterTest<test::Geometry>("Geometry Test");
 	testMenu->RegisterTest<test::About>("About");
@@ -166,10 +175,10 @@ int main(void)
 
 
 	std::cout << "\n\n";
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window) && !shouldClose)
 	{
-		//    /*
-		if (starting)
+		// Loading screen animation
+		if (starting) 
 		{
 			GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 			renderer.Clear();
@@ -186,37 +195,33 @@ int main(void)
 			windowFlags |= ImGuiWindowFlags_NoNav;
 			windowFlags |= ImGuiWindowFlags_NoBackground;
 			windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-			windowFlags |= ImGuiWindowFlags_UnsavedDocument;
 			bool* o = nullptr;
 
-			ImGui::Begin("h", o, windowFlags);
+			ImGui::Begin("##", o, windowFlags);
 
-			Random random;
-
-			static float progress = 0.0f, step = 0.0f;
+			static float progress = 0.0f, step = 0.01f;
 			progress += step * ImGui::GetIO().DeltaTime;
 
+			Random random;
 			if (random.RandomNumber(0, 100) > 99)
 				step = random.RandomNumber(0.1f, 0.4f);
 
-			if (progress >= +1.1f)
+			if (progress >= +1.05f)
 				starting = false;
 			ImGui::SameLine(200);
 			ImGui::Text("Loading...");
 			ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f));
 			ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
 
-
 			ImGui::End();
-
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 			renderer.Swap(window);
 			renderer.PollEvents();
-			
 			continue;
 		}
-		//   */
+
+
 		GLCall(glClearColor(0.03f, 0.03f, 0.03f, 1.0f));
 		renderer.Clear();
 		ImGui_ImplOpenGL3_NewFrame();
@@ -226,7 +231,12 @@ int main(void)
 
 		if (currentTest)
 		{
-			ImGui::Begin(currentTestName.c_str());
+			ImGuiWindowFlags windowFlags = 0;
+			windowFlags |= ImGuiWindowFlags_NoMove;
+			windowFlags |= ImGuiWindowFlags_NoResize;
+			windowFlags |= ImGuiWindowFlags_NoCollapse;
+
+			ImGui::Begin(currentTestName.c_str(), 0, windowFlags);
 
 			currentTest->OnUpdate(0);
 			currentTest->OnRender();
@@ -236,7 +246,7 @@ int main(void)
 				delete currentTest, currentTest = testMenu, currentTestName = "Test Menu";
 			ImGui::End();
 			
-			ImGui::Begin("Debug");
+			ImGui::Begin("Debug", 0, windowFlags);
 			ImGui::Text("Frametime: %.3f ms (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::End();
 		}
@@ -256,5 +266,8 @@ int main(void)
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	glfwTerminate();
+
+	std::cout << "Cleanup........................OK";
+
 	return 0;
 }

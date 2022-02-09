@@ -14,8 +14,7 @@ namespace test
 
 	void About::OnImguiRender()
 	{
-		std::string buffer = R"(
-#include <iostream>
+		std::string buffer = R"(#include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -110,7 +109,6 @@ static inline void CheckWindow(GLFWwindow* window)
 	std::cout << "GLFW_WINDOW....................OK\n";
 }
 
-
 float MouseX = 0, MouseY = 0;
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
@@ -121,7 +119,10 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 
 int main(void)
 {
-	int w, h;
+	// TODO: dvd test
+
+
+	int w = -1, h = -1;
 	std::cout << "Input window width and height (-1 for default)\n";
 	std::cin >> w >> h;
 
@@ -148,10 +149,10 @@ int main(void)
 
 	CheckGLEW();
 
-	std::cout << "OpenGL renderer:\n";
-	std::cout << "Vendor........................." << glGetString(GL_VENDOR) << "\n";
-	std::cout << "Renderer......................." << glGetString(GL_RENDERER) << "\n";
-	std::cout << "Version........................" << glGetString(GL_VERSION) << "\n";
+	std::cout << "\nOpenGL renderer:\n";
+	std::cout << " Vendor........................." << glGetString(GL_VENDOR) << '\n';
+	std::cout << " Renderer......................." << glGetString(GL_RENDERER) << '\n';
+	std::cout << " Version........................" << glGetString(GL_VERSION) << "\n\n";
 
 	GLCall(glEnable(GL_BLEND));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
@@ -165,21 +166,27 @@ int main(void)
 
 	Renderer renderer;
 
+	bool shouldClose = false;
+
 	std::string currentTestName = "Test Menu";
 	test::Test* currentTest = nullptr;
-	test::TestMenu* testMenu = new test::TestMenu(currentTest, currentTestName);
+	test::TestMenu* testMenu = new test::TestMenu(currentTest, currentTestName, &shouldClose);
 	currentTest = testMenu;
 
-	testMenu->RegisterTest<test::ClearColor>("Clear Color");
+
+	testMenu->RegisterTest<test::ClearColor>("Clear Color Test");
 	testMenu->RegisterTest<test::TextureTest>("Texture Test");
 	testMenu->RegisterTest<test::Geometry>("Geometry Test");
 	testMenu->RegisterTest<test::About>("About");
 
 	
+	bool starting = true;
+
+
 	std::cout << "\n\n";
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window) && !shouldClose)
 	{
-		GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+		GLCall(glClearColor(0.03f, 0.03f, 0.03f, 1.0f));
 		renderer.Clear();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -189,6 +196,7 @@ int main(void)
 		if (currentTest)
 		{
 			ImGui::Begin(currentTestName.c_str());
+
 			currentTest->OnUpdate(0);
 			currentTest->OnRender();
 			currentTest->OnImguiRender();
@@ -217,17 +225,15 @@ ImGui_ImplOpenGL3_Shutdown();
 ImGui_ImplGlfw_Shutdown();
 ImGui::DestroyContext();
 glfwTerminate();
+
+std::cout << "Cleanup........................OK";
+
 return 0;
 })";
 
 		ImGui::Text("Vlad_");
 		ImGui::NewLine();
-		ImGui::Checkbox("Show demo window", &m_ShowDemo);
-
 		ImGui::Text("_Main.cpp");
 		ImGui::InputTextMultiline("##src", (char*)buffer.c_str(), sizeof(buffer));
-
-		if (m_ShowDemo)
-			ImGui::ShowDemoWindow();
 	}
 }
