@@ -7,8 +7,8 @@
 
 bool test::TextureTest::m_Blending = true;
 
-test::TextureTest::TextureTest() :	m_ColorTest("C:/dev/OpenGL/Test2/Test2/res/textures/Color_Test_Texture.png"),
-									m_BlendTest("C:/dev/OpenGL/Test2/Test2/res/textures/Transparency-Blending_Test_Texture.png")
+test::TextureTest::TextureTest() :	m_ColorTest("res/textures/Color_Test_Texture.png"),
+									m_BlendTest("res/textures/Transparency-Blending_Test_Texture.png")
 {
 	m_Va = new VertexArray();
 	m_Vb = new VertexBuffer(vertices, 4 * 5 * sizeof(float));
