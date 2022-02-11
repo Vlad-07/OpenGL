@@ -112,6 +112,7 @@ int main(void)
 {
 	// TODO: dvd test
 	// TODO: change code gen from MTd to MT
+	// TODO: http://dependencywalker.com/
 
 
 	int w = -1, h = -1, samples = 8;
