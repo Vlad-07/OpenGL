@@ -111,7 +111,6 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 int main(void)
 {
 	// TODO: dvd test
-	// TODO: change code gen from MTd to MT
 	// TODO: http://dependencywalker.com/
 
 
