@@ -111,7 +111,6 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 int main(void)
 {
 	// TODO: dvd test
-	// TODO: http://dependencywalker.com/
 
 
 	int w = -1, h = -1, samples = 8;
