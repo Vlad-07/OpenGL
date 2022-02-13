@@ -58,22 +58,102 @@ public:
 	}
 };
 
+static void GenImGuiIni(bool generate)
+{
+	if (!generate)
+		return;
 
-static inline void CheckGLFW()
+	std::ofstream out("imgui.ini");
+
+	std::string file = R"([Window][Debug##Default]
+Pos=299,99
+Size=424,395
+Collapsed=0
+
+[Window][Debug]
+Pos=15,14
+Size=316,72
+Collapsed=0
+
+[Window][Test Menu]
+Pos=15,95
+Size=199,238
+Collapsed=0
+
+[Window][Clear Color Test]
+Pos=15,95
+Size=315,336
+Collapsed=0
+
+[Window][Geometry Test]
+Pos=15,95
+Size=358,143
+Collapsed=0
+
+[Window][Window]
+Pos=70,45
+Size=386,360
+Collapsed=0
+
+[Window][NULL]
+Pos=60,60
+Size=115,123
+Collapsed=0
+
+[Window][Texture Test]
+Pos=15,95
+Size=179,179
+Collapsed=0
+
+[Window][About]
+Pos=15,95
+Size=604,261
+Collapsed=0
+
+[Window][Dear ImGui Demo]
+Pos=389,49
+Size=560,680
+Collapsed=0
+
+[Window][Dear ImGui Metrics/Debugger]
+Pos=-19,62
+Size=339,273
+Collapsed=0
+
+[Window][Dear ImGui Stack Tool]
+Pos=60,60
+Size=354,104
+Collapsed=0
+
+[Window][]
+Pos=256,217
+Size=724,112
+Collapsed=0
+
+[Window][##]
+Pos=247,206
+Size=710,61
+Collapsed=0
+)";
+
+	out << file;
+}
+
+static void CheckGLFW()
 {
 	if (!glfwInit())
 		std::cout << "GLFW...........................FAILED\n";
 	else
 		std::cout << "GLFW...........................OK\n";
 }
-static inline void CheckGLEW()
+static void CheckGLEW()
 {
 	if (glewInit() != GLEW_OK)
 		std::cout << "GLEW...........................FAILED\n";
 	else
 		std::cout << "GLEW...........................OK\n";
 }
-static inline void InitImGui(GLFWwindow* window)
+static void InitImGui(GLFWwindow* window)
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -81,7 +161,7 @@ static inline void InitImGui(GLFWwindow* window)
 	ImGui_ImplOpenGL3_Init("#version 330 core");
 	ImGui::StyleColorsDark();
 }
-static inline void CheckWindow(GLFWwindow* window)
+static void CheckWindow(GLFWwindow* window)
 {
 	if (!window)
 	{
@@ -92,7 +172,7 @@ static inline void CheckWindow(GLFWwindow* window)
 	}
 	std::cout << "GLFW_WINDOW....................OK\n";
 }
-static inline void PrintStats()
+static void PrintStats()
 {
 	std::cout << "\nOpenGL renderer:\n";
 	std::cout << " Vendor........................." << glGetString(GL_VENDOR) << '\n';
@@ -112,6 +192,7 @@ int main(void)
 {
 	// TODO: dvd test
 
+	GenImGuiIni(true);
 
 	int w = -1, h = -1, samples = 8;
 	std::cout << "Input window width, height and aa samples (-1 for default)\n";
