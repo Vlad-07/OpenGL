@@ -192,11 +192,52 @@ int main(void)
 {
 	// TODO: dvd test
 
-	GenImGuiIni(true);
+	
 
-	int w = -1, h = -1, samples = 8;
-	std::cout << "Input window width, height and aa samples (-1 for default)\n";
-	std::cin >> w >> h >> samples;
+	int glMajor = 0, glMinor = 0, w = -1, h = -1, samples = 8;
+
+glVersion:
+	std::cout << "Input OpenGL major and minor version, in this order (-1 for default version)\n";
+	std::cin >> glMajor;
+	if (glMajor == -1)
+	{
+		glMajor = 3;
+		glMinor = 3;
+		goto window;
+	}
+	else if (glMajor < 3 || glMajor > 4)
+	{
+		std::cout << "Invalid/unsuported major version!\n";
+		goto glVersion;
+	}
+
+	std::cin >> glMinor;
+	if (glMinor == -1)
+		glMinor = 3;
+	else
+	{
+		switch (glMajor)
+		{
+		case 3:
+			if (glMinor < 2 || glMinor > 3)
+			{
+				std::cout << "Invalid/unsuported minor version!\n";
+				goto glVersion;
+			}
+			break;
+		case 4:
+			if (glMinor < 0 || glMinor > 6)
+			{
+				std::cout << "Invalid minor version!\n";
+				goto glVersion;
+			}
+			break;
+		}
+	}
+
+window:
+	std::cout << "Input window width, height and aa samples (-1 for default values)\n";
+//	std::cin >> w >> h >> samples;
 
 	if (w != -1)
 		WindowWidth = w;
@@ -208,9 +249,12 @@ int main(void)
 		samples = 4;
 
 	std::cout << "Begin...\n";
+
+	GenImGuiIni(true);
+
 	CheckGLFW();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glMajor);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glMinor);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_SAMPLES, samples);
 
