@@ -11,9 +11,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
 
 #include "Renderer.h"
 
@@ -29,8 +29,8 @@
 #include "tests/TestGeometry.h"
 #include "tests/TestAbout.h"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 static int WindowWidth = 960;
 static int WindowHeight = 540;
