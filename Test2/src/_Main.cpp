@@ -142,14 +142,20 @@ Collapsed=0
 static void CheckGLFW()
 {
 	if (!glfwInit())
+	{
 		std::cout << "GLFW...........................FAILED\n";
+		std::cin.get();
+	}
 	else
 		std::cout << "GLFW...........................OK\n";
 }
 static void CheckGLEW()
 {
 	if (glewInit() != GLEW_OK)
+	{
 		std::cout << "GLEW...........................FAILED\n";
+		std::cin.get();
+	}
 	else
 		std::cout << "GLEW...........................OK\n";
 }
@@ -237,7 +243,7 @@ glVersion:
 
 window:
 	std::cout << "Input window width, height and aa samples (-1 for default values)\n";
-//	std::cin >> w >> h >> samples;
+	std::cin >> w >> h >> samples;
 
 	if (w != -1)
 		WindowWidth = w;
