@@ -144,7 +144,8 @@ static void CheckGLFW()
 	if (!glfwInit())
 	{
 		std::cout << "GLFW...........................FAILED\n";
-		std::cin.get();
+		char c;
+		std::cin >> c;
 	}
 	else
 		std::cout << "GLFW...........................OK\n";
@@ -154,7 +155,8 @@ static void CheckGLEW()
 	if (glewInit() != GLEW_OK)
 	{
 		std::cout << "GLEW...........................FAILED\n";
-		std::cin.get();
+		char c;
+		std::cin >> c;
 	}
 	else
 		std::cout << "GLEW...........................OK\n";
@@ -172,7 +174,8 @@ static void CheckWindow(GLFWwindow* window)
 	if (!window)
 	{
 		std::cout << "GLFW_window_init...............FAILED\n";
-		std::cin.get();
+		char c;
+		std::cin >> c;
 		glfwTerminate();
 		exit(-1);
 	}
